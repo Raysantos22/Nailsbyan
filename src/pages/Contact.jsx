@@ -60,7 +60,7 @@ export default function Contact() {
             </ul>
             <div className="mt-6 flex flex-wrap gap-3">
               {mLink && (
-                <a href={mLink} target="_blank" rel="noreferrer" className="btn bg-[#0866FF] text-white hover:bg-[#0756d6]">
+                <a href={mLink} target="_blank" rel="noreferrer" className="btn bg-brand-600 text-white hover:bg-brand-700">
                   <MessageCircle className="h-4 w-4" /> Message us on Messenger
                 </a>
               )}

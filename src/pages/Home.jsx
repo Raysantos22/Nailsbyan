@@ -44,7 +44,7 @@ export default function Home() {
     <div className="-mb-16 bg-mist">
       {/* ---------------------------------------------------------------- Hero */}
       {/* Fills the screen below the header; the hands drift down on scroll. */}
-      <section className="relative flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden md:block md:min-h-[calc(100svh-6rem)]">
+      <section className="relative flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden sm:min-h-[calc(100svh-5rem)] md:block lg:min-h-[calc(100svh-6rem)]">
         {/* decorative blocks along the bottom edge, as in the design */}
         <div className="halftone absolute bottom-8 left-[40%] hidden h-12 w-24 opacity-25 md:block" aria-hidden="true" />
         <div className="absolute right-[5%] bottom-0 hidden h-28 w-56 bg-blush md:block" aria-hidden="true" />

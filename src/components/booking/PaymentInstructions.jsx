@@ -151,7 +151,7 @@ export default function PaymentInstructions({ booking, business }) {
               </ol>
               {business.payment_instructions && <p className="text-stone-600">{business.payment_instructions}</p>}
               {mLink && (
-                <a href={mLink} target="_blank" rel="noreferrer" className="btn w-full bg-[#0866FF] text-white hover:bg-[#0756d6] sm:w-auto">
+                <a href={mLink} target="_blank" rel="noreferrer" className="btn w-full bg-brand-600 text-white hover:bg-brand-700 sm:w-auto">
                   <MessageCircle className="h-4 w-4" /> Send payment proof on Messenger
                 </a>
               )}

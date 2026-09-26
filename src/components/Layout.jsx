@@ -66,7 +66,7 @@ function Header({ business }) {
   return (
     <header className="sticky top-0 z-40 bg-mist/95 backdrop-blur">
       {/* Desktop: nav | centered logo | nav */}
-      <div className="container-page hidden h-24 grid-cols-[1fr_auto_1fr] items-center gap-6 md:grid">
+      <div className="container-page hidden h-24 grid-cols-[1fr_auto_1fr] items-center gap-6 lg:grid">
         <nav className="flex items-center gap-10" aria-label="Main">
           {NAV_LEFT.map((n) => (
             <NavLink key={n.to} to={n.to} end={n.end} className={linkClass}>
@@ -88,7 +88,7 @@ function Header({ business }) {
       </div>
 
       {/* Mobile */}
-      <div className="container-page flex h-16 items-center justify-between gap-3 md:hidden">
+      <div className="container-page flex h-16 items-center justify-between gap-3 sm:h-20 lg:hidden">
         <Logo business={business} />
         <div className="flex items-center gap-1">
           <Link to="/book" className="btn-outline px-3! py-2! text-[0.65rem]!">
@@ -107,7 +107,7 @@ function Header({ business }) {
         </div>
       </div>
       {open && (
-        <nav id="mobile-nav" className="border-t border-ink/5 bg-mist md:hidden" aria-label="Mobile">
+        <nav id="mobile-nav" className="border-t border-ink/5 bg-mist lg:hidden" aria-label="Mobile">
           <div className="container-page flex flex-col divide-y divide-ink/5 py-1">
             {NAV.map((n) => (
               <NavLink key={n.to} to={n.to} end={n.end} className={mobileLinkClass}>
@@ -186,7 +186,7 @@ function Footer({ business }) {
         </div>
         <div>
           <h2 className="mb-3 font-sans text-sm font-semibold tracking-wide text-ink uppercase">Opening hours</h2>
-          <OpeningHours hours={business?.hours_json} compact />
+          {business && <OpeningHours hours={business.hours_json} compact />}
         </div>
       </div>
       <div className="border-t border-brand-100 py-4 text-center text-xs text-stone-500">
@@ -209,7 +209,7 @@ export function MessengerButton({ business }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="fixed right-4 bottom-4 z-50 inline-flex items-center gap-2 rounded-full bg-[#0866FF] px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:scale-105 hover:bg-[#0756d6] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0866FF]"
+      className="fixed right-4 bottom-4 z-50 inline-flex items-center gap-2 rounded-full bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-900/20 ring-1 ring-white/40 transition hover:scale-105 hover:bg-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:right-6 sm:bottom-6"
       aria-label="Message us on Facebook Messenger"
     >
       <MessageCircle className="h-5 w-5" aria-hidden="true" />
