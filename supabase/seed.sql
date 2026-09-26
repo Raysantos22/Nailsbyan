@@ -93,16 +93,32 @@ union all
 select '33333333-0000-4000-8000-000000000002'::uuid, d, '10:00'::time, '18:00'::time from generate_series(2, 6) as d;
 
 -- ---------------------------------------------------------------------
--- Gallery (PLACEHOLDER artwork until real photos are uploaded in /admin)
+-- Gallery: real Nails by An work (files in public/gallery/)
 -- ---------------------------------------------------------------------
-insert into public.gallery_photos (id, business_id, image_url, caption, sort_order)
-select ('44444444-0000-4000-8000-00000000000' || n)::uuid,
-       '11111111-1111-4111-8111-111111111111',
-       '/placeholders/gallery-' || n || '.svg',
-       'Sample design ' || n || ' (placeholder)',
-       n
-  from generate_series(1, 8) as n
-on conflict (id) do nothing;
+delete from public.gallery_photos
+ where business_id = '11111111-1111-4111-8111-111111111111' and image_url like '/placeholders/%';
+insert into public.gallery_photos (id, business_id, image_url, caption, sort_order) values
+  ('44444444-0000-4000-8000-000000000001', '11111111-1111-4111-8111-111111111111', '/gallery/set-01.webp', 'Soft white ombré almond set', 1),
+  ('44444444-0000-4000-8000-000000000002', '11111111-1111-4111-8111-111111111111', '/gallery/set-02.webp', 'Soft white ombré almond set', 11),
+  ('44444444-0000-4000-8000-000000000003', '11111111-1111-4111-8111-111111111111', '/gallery/set-03.webp', 'Butter yellow polka dots with 3D flowers', 2),
+  ('44444444-0000-4000-8000-000000000004', '11111111-1111-4111-8111-111111111111', '/gallery/set-04.webp', 'Butter yellow polka dots with 3D flowers', 12),
+  ('44444444-0000-4000-8000-000000000005', '11111111-1111-4111-8111-111111111111', '/gallery/set-05.webp', 'Ocean blue marble with gold foil', 3),
+  ('44444444-0000-4000-8000-000000000006', '11111111-1111-4111-8111-111111111111', '/gallery/set-06.webp', 'Ocean blue marble with gold foil', 13),
+  ('44444444-0000-4000-8000-000000000007', '11111111-1111-4111-8111-111111111111', '/gallery/set-07.webp', 'Ruby red glitter gel', 4),
+  ('44444444-0000-4000-8000-000000000008', '11111111-1111-4111-8111-111111111111', '/gallery/set-08.webp', 'Ruby red glitter gel', 14),
+  ('44444444-0000-4000-8000-000000000009', '11111111-1111-4111-8111-111111111111', '/gallery/set-09.webp', 'Nude with white pinstripes', 5),
+  ('44444444-0000-4000-8000-000000000010', '11111111-1111-4111-8111-111111111111', '/gallery/set-10.webp', 'Nude with white pinstripes', 15),
+  ('44444444-0000-4000-8000-000000000011', '11111111-1111-4111-8111-111111111111', '/gallery/set-11.webp', 'Classic latte nude gel', 6),
+  ('44444444-0000-4000-8000-000000000012', '11111111-1111-4111-8111-111111111111', '/gallery/set-12.webp', 'Classic latte nude gel', 16),
+  ('44444444-0000-4000-8000-000000000013', '11111111-1111-4111-8111-111111111111', '/gallery/set-13.webp', 'Chrome polka dot French tips', 7),
+  ('44444444-0000-4000-8000-000000000014', '11111111-1111-4111-8111-111111111111', '/gallery/set-14.webp', 'Sheer nude polka dot French', 17),
+  ('44444444-0000-4000-8000-000000000015', '11111111-1111-4111-8111-111111111111', '/gallery/set-15.webp', 'Pearl chrome glazed nails', 8),
+  ('44444444-0000-4000-8000-000000000016', '11111111-1111-4111-8111-111111111111', '/gallery/set-16.webp', 'Pearl chrome glazed nails', 18),
+  ('44444444-0000-4000-8000-000000000017', '11111111-1111-4111-8111-111111111111', '/gallery/set-17.webp', 'Sage green & pink blush art', 9),
+  ('44444444-0000-4000-8000-000000000018', '11111111-1111-4111-8111-111111111111', '/gallery/set-18.webp', 'Sage green & pink blush art', 19),
+  ('44444444-0000-4000-8000-000000000019', '11111111-1111-4111-8111-111111111111', '/gallery/set-19.webp', 'Lilac florals with gold lines', 10),
+  ('44444444-0000-4000-8000-000000000020', '11111111-1111-4111-8111-111111111111', '/gallery/set-20.webp', 'Lilac florals with gold lines', 20)
+on conflict (id) do update set image_url = excluded.image_url, caption = excluded.caption, sort_order = excluded.sort_order;
 
 -- ---------------------------------------------------------------------
 -- Testimonials (PLACEHOLDER — replace with real Facebook reviews)

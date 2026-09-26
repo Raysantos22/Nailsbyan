@@ -384,7 +384,7 @@ describe('row level security & privileges', () => {
   it('anon can read the public menu but not bookings/customers, and cannot call create_booking', async () => {
     await as(db, 'anon', null, async () => {
       expect((await q('select count(*)::int as n from services'))[0].n).toBe(11)
-      expect((await q('select count(*)::int as n from gallery_photos'))[0].n).toBe(8)
+      expect((await q('select count(*)::int as n from gallery_photos'))[0].n).toBe(20)
       await expectError(q('select * from bookings'), 'permission denied')
       await expectError(q('select * from customers'), 'permission denied')
       await expectError(

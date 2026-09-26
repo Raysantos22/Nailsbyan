@@ -34,7 +34,7 @@ export default function Home() {
 
   const featured = (services.data || []).filter((s) => !s.is_addon).slice(0, 5)
   const photos = gallery.data || []
-  const strip = photos.slice(1, 5).length === 4 ? photos.slice(1, 5) : photos.slice(0, 4)
+  const strip = photos.slice(0, 4)
   const quotes = (testimonials.data || []).slice(0, 3)
   const reviewsUrl = business.facebook_page_url
     ? `${business.facebook_page_url}${business.facebook_page_url.includes('?') ? '&' : '?'}sk=reviews`
@@ -92,15 +92,18 @@ export default function Home() {
       <section className="grid md:grid-cols-2">
         {/* Left: full-height photo with social rail */}
         <div className="relative min-h-[70svh] overflow-hidden bg-blush md:min-h-[100svh]">
-          {photos[0] && (
+          <picture>
+            <source media="(max-width: 767px)" srcSet="/images/studio-700.webp" />
             <img
-              src={photos[0].image_url}
-              alt={photos[0].caption || 'Nail design'}
-              className="absolute inset-0 h-full w-full object-cover"
+              src="/images/studio.webp"
+              alt={`The ${business.name} studio: neon wall sign, manicure desk and gel polish shelves`}
+              width="1086"
+              height="1448"
+              className="absolute inset-0 h-full w-full object-cover object-[35%_40%]"
               loading="lazy"
             />
-          )}
-          <div className="absolute top-1/2 left-4 flex -translate-y-1/2 flex-col gap-5 sm:left-6">
+          </picture>
+          <div className="absolute top-1/2 left-4 flex -translate-y-1/2 flex-col gap-5 rounded-full bg-white/85 px-2.5 py-4 shadow-sm backdrop-blur sm:left-6">
             {business.facebook_page_url && (
               <a href={business.facebook_page_url} target="_blank" rel="noreferrer" aria-label="Facebook" className="text-ink transition hover:text-brand-600">
                 <Facebook className="h-5 w-5" />

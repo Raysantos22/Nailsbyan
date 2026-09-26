@@ -16,7 +16,7 @@ const migrationFiles = import.meta.glob('../../../supabase/migrations/*.sql', {
   eager: true,
 })
 
-const DB_NAME = 'idb://nails-by-an-demo-v2'
+const DB_NAME = 'idb://nails-by-an-demo-v3'
 const DEMO_ADMIN_ID = 'dddddddd-0000-4000-8000-000000000001'
 const SESSION_KEY = 'nails-demo-session'
 

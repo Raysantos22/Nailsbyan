@@ -22,7 +22,7 @@ test('public pages render real data without errors or horizontal scroll', async 
   await expectNoHorizontalScroll(page)
 
   await page.goto('/gallery')
-  await expect(page.getByRole('button', { name: /Open photo/ })).toHaveCount(8)
+  await expect(page.getByRole('button', { name: /Open photo/ })).toHaveCount(20)
   await page.getByRole('button', { name: /Open photo/ }).first().click()
   await expect(page.getByRole('dialog')).toBeVisible()
   await page.keyboard.press('Escape')

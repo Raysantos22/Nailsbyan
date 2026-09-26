@@ -121,11 +121,11 @@ test('admin manages services, staff hours, gallery and the payment QR', async ({
 
   // Gallery upload
   await page.goto('/admin/gallery')
-  await expect(page.locator('img[loading=lazy]')).toHaveCount(8)
+  await expect(page.locator('img[loading=lazy]')).toHaveCount(20)
   await page.locator('input[type=file]').setInputFiles({ name: 'set.png', mimeType: 'image/png', buffer: PNG })
-  await expect(page.locator('img[loading=lazy]')).toHaveCount(9)
+  await expect(page.locator('img[loading=lazy]')).toHaveCount(21)
   await page.goto('/gallery')
-  await expect(page.getByRole('button', { name: /Open photo/ })).toHaveCount(9)
+  await expect(page.getByRole('button', { name: /Open photo/ })).toHaveCount(21)
 
   // Payment QR upload → shown to customers
   await page.goto('/admin/settings')
