@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
-import { Star } from 'lucide-react'
+import { MapPin, MessageCircle, Star } from 'lucide-react'
 import { Facebook } from '../components/icons.jsx'
 import { useBusiness } from '../lib/BusinessContext.jsx'
 import { api } from '../lib/api/index.js'
 import { useAsync } from '../lib/useAsync.js'
-import { formatDuration, formatMoney } from '../lib/format.js'
+import { formatDuration, formatMoney, messengerLink } from '../lib/format.js'
+import { useParallax } from '../lib/useParallax.js'
 import FacebookPagePlugin from '../components/FacebookPagePlugin.jsx'
 
 // Loose brush stroke used as a decorative accent.
@@ -26,14 +27,14 @@ function SectionLabel({ children, className = '' }) {
 
 export default function Home() {
   const { business } = useBusiness()
+  const handsRef = useParallax(0.35)
   const services = useAsync(() => api.listServices(business.id), [business.id])
   const gallery = useAsync(() => api.listGallery(business.id), [business.id])
   const testimonials = useAsync(() => api.listTestimonials(business.id), [business.id])
 
   const featured = (services.data || []).filter((s) => !s.is_addon).slice(0, 5)
   const photos = gallery.data || []
-  const second = photos[0]
-  const strip = photos.slice(1, 5).length === 4 ? photos.slice(1, 5) : photos.slice(0, 4)
+  const strip = photos.slice(2, 6).length === 4 ? photos.slice(2, 6) : photos.slice(0, 4)
   const quotes = (testimonials.data || []).slice(0, 3)
   const reviewsUrl = business.facebook_page_url
     ? `${business.facebook_page_url}${business.facebook_page_url.includes('?') ? '&' : '?'}sk=reviews`
@@ -42,15 +43,16 @@ export default function Home() {
   return (
     <div className="-mb-16 bg-mist">
       {/* ---------------------------------------------------------------- Hero */}
-      <section className="relative overflow-hidden">
+      {/* Fills the screen below the header; the hands drift down on scroll. */}
+      <section className="relative flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden md:block md:min-h-[calc(100svh-6rem)]">
         {/* decorative blocks along the bottom edge, as in the design */}
-        <div className="halftone absolute bottom-6 left-[50%] hidden h-12 w-24 opacity-25 md:block" aria-hidden="true" />
-        <div className="absolute right-[6%] bottom-0 hidden h-24 w-48 bg-blush md:block" aria-hidden="true" />
-        <div className="absolute right-[6%] bottom-24 hidden h-10 w-28 bg-blush/70 md:block" aria-hidden="true" />
+        <div className="halftone absolute bottom-8 left-[40%] hidden h-12 w-24 opacity-25 md:block" aria-hidden="true" />
+        <div className="absolute right-[5%] bottom-0 hidden h-28 w-56 bg-blush md:block" aria-hidden="true" />
+        <div className="absolute right-[5%] bottom-28 hidden h-12 w-32 bg-blush/70 md:block" aria-hidden="true" />
 
-        <div className="container-page relative grid items-center md:min-h-[600px] md:grid-cols-[1fr_1.2fr]">
-          <div className="relative z-10 pt-10 pb-6 text-center md:py-24">
-            <h1 className="font-heading text-[2.1rem] leading-[1.15] font-semibold tracking-[0.1em] whitespace-nowrap text-ink uppercase sm:text-5xl lg:text-[3.3rem] xl:text-[3.7rem]">
+        <div className="container-page relative z-20 flex items-center md:absolute md:inset-0 md:mx-auto">
+          <div className="w-full pt-10 pb-4 text-center md:w-[44%] md:py-0">
+            <h1 className="font-heading text-[2.1rem] leading-[1.15] font-semibold tracking-[0.1em] whitespace-nowrap text-ink uppercase sm:text-5xl lg:text-[3.4rem] xl:text-[4rem]">
               Pretty nails
               <br />
               happier you
@@ -62,12 +64,15 @@ export default function Home() {
               <br />
               by {business.name}.
             </p>
-            <Link to="/book" className="btn-outline mt-8 px-10">
+            <Link to="/book" className="btn-outline mt-8 bg-mist/80 px-10">
               Book an appointment
             </Link>
           </div>
+        </div>
 
-          <div className="relative z-10 -mx-4 self-end md:mx-0 md:-mr-16 lg:-mr-28">
+        {/* Hands: big, anchored bottom-right, parallax on scroll */}
+        <div className="relative z-10 mt-auto -mx-[22%] md:absolute md:right-[-3vw] md:bottom-0 md:mx-0 md:w-[min(64vw,calc((100svh-6rem)*1.22))] md:max-w-[1180px]">
+          <div ref={handsRef} className="will-change-transform">
             <picture>
               <source media="(max-width: 767px)" srcSet="/images/hero-hands-760.webp" />
               <img
@@ -83,34 +88,44 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ------------------------------------------------------------ Collage */}
+      {/* ------------------------------------- Welcome (big split panels) */}
       <section className="grid md:grid-cols-2">
-        <div className="relative min-h-[360px] overflow-hidden bg-blush sm:min-h-[440px]">
-          <BrushStroke className="absolute top-10 -right-10 h-16 w-72 rotate-[-8deg] text-white/60" />
-          <BrushStroke className="absolute bottom-16 -left-12 h-12 w-60 rotate-[6deg] text-white/40" />
-          {second && (
+        {/* Left: full-height photo with social rail */}
+        <div className="relative min-h-[70svh] overflow-hidden bg-blush md:min-h-[100svh]">
+          {photos[0] && (
             <img
-              src={second.image_url}
-              alt={second.caption || 'Nail design'}
-              className="absolute bottom-0 left-1/2 aspect-square w-[62%] -translate-x-1/2 object-cover shadow-xl"
+              src={photos[0].image_url}
+              alt={photos[0].caption || 'Nail design'}
+              className="absolute inset-0 h-full w-full object-cover"
               loading="lazy"
             />
           )}
-          <Link
-            to="/gallery"
-            className="absolute top-8 left-8 bg-white px-5 py-3 font-heading text-xs font-semibold tracking-[0.2em] text-ink uppercase shadow-sm transition hover:bg-ink hover:text-white"
-          >
-            View lookbook →
-          </Link>
+          <div className="absolute top-1/2 left-4 flex -translate-y-1/2 flex-col gap-5 sm:left-6">
+            {business.facebook_page_url && (
+              <a href={business.facebook_page_url} target="_blank" rel="noreferrer" aria-label="Facebook" className="text-ink transition hover:text-brand-600">
+                <Facebook className="h-5 w-5" />
+              </a>
+            )}
+            {messengerLink(business) && (
+              <a href={messengerLink(business)} target="_blank" rel="noreferrer" aria-label="Messenger" className="text-ink transition hover:text-brand-600">
+                <MessageCircle className="h-5 w-5" />
+              </a>
+            )}
+            <Link to="/contact" aria-label="Location and hours" className="text-ink transition hover:text-brand-600">
+              <MapPin className="h-5 w-5" />
+            </Link>
+          </div>
         </div>
 
-        <div className="dot-texture relative overflow-hidden px-6 py-12 sm:px-12 sm:py-16">
-          <div className="absolute top-10 right-0 h-44 w-40 bg-blush sm:w-56" aria-hidden="true" />
-          <div className="halftone absolute top-6 left-6 h-20 w-28 opacity-40" aria-hidden="true" />
-          <div className="relative max-w-md">
-            <SectionLabel>The menu</SectionLabel>
-            <h2 className="mt-2 font-heading text-3xl font-bold tracking-[0.06em] text-ink uppercase sm:text-4xl">Popular services</h2>
-            <ul className="mt-8 space-y-5">
+        {/* Right: welcome text + menu, then a second big photo */}
+        <div className="flex flex-col">
+          <div className="bg-white px-6 py-14 sm:px-12 lg:px-16 lg:py-20">
+            <p className="font-heading text-lg tracking-[0.08em] text-ink/80 uppercase">Welcome to</p>
+            <h2 className="mt-2 font-display text-5xl leading-tight text-ink italic sm:text-6xl lg:text-7xl">{business.name}</h2>
+            {business.description && <p className="mt-6 max-w-md leading-relaxed text-stone-600">{business.description}</p>}
+
+            <h3 className="mt-10 font-heading text-sm font-semibold tracking-[0.2em] text-brand-600 uppercase">Popular services</h3>
+            <ul className="mt-5 max-w-md space-y-4">
               {featured.map((s) => (
                 <li key={s.id}>
                   <Link to={`/book?service=${s.id}`} className="group block">
@@ -126,8 +141,29 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <Link to="/services" className="btn-outline mt-10 bg-white/70">
-              Full menu
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Link to="/services" className="btn-outline">
+                Full menu
+              </Link>
+              <Link to="/book" className="btn-outline border-ink bg-ink text-white hover:bg-transparent hover:text-ink">
+                Book now
+              </Link>
+            </div>
+          </div>
+          <div className="relative min-h-[50svh] flex-1 overflow-hidden bg-blush">
+            {photos[1] && (
+              <img
+                src={photos[1].image_url}
+                alt={photos[1].caption || 'Nail design'}
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
+              />
+            )}
+            <Link
+              to="/gallery"
+              className="absolute bottom-8 left-8 bg-white px-5 py-3 font-heading text-xs font-semibold tracking-[0.2em] text-ink uppercase shadow-sm transition hover:bg-ink hover:text-white"
+            >
+              View lookbook →
             </Link>
           </div>
         </div>
