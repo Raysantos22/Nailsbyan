@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { bookAppointment, expectNoHorizontalScroll, waitForApp, watchErrors } from './helpers.js'
+import { chooseStaff, bookAppointment, expectNoHorizontalScroll, waitForApp, watchErrors } from './helpers.js'
 
 test('public pages render real data without errors or horizontal scroll', async ({ page }) => {
   const errors = watchErrors(page)
@@ -82,8 +82,7 @@ test('a booked slot is no longer offered for the same staff member', async ({ pa
   await waitForApp(page)
   await page.getByRole('checkbox', { name: /^Gel Pedicure/ }).check()
   await page.getByRole('button', { name: 'Continue' }).click()
-  await page.getByRole('radio', { name: /^An\b/ }).check({ force: true })
-  await page.getByRole('button', { name: 'Continue' }).click()
+  await chooseStaff(page, 'An')
   // Open the booked date. If that day is now fully booked it is disabled,
   // which also proves the slot is gone; otherwise the booked time must be missing.
   await expect(page.locator('[role=option][aria-selected=true]')).toBeVisible()
@@ -109,7 +108,9 @@ test('add-ons need a main service; validation blocks bad details', async ({ page
 
   await page.getByRole('checkbox', { name: /^Toe Nail Extension/ }).check()
   await page.getByRole('button', { name: 'Continue' }).click()
-  await page.getByRole('button', { name: 'Continue' }).click() // any available
+  await chooseStaff(page)
+  // An works alone, so there is no Staff step
+  await expect(page.getByRole('list', { name: 'Booking steps' })).not.toContainText('Staff')
   await page.locator('button[aria-pressed]').first().click()
   await page.getByRole('button', { name: 'Continue' }).click()
   await page.getByLabel(/Mobile number/).fill('12')

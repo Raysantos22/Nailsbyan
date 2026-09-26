@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { PNG, adminLogin, bookAppointment, expectNoHorizontalScroll, watchErrors } from './helpers.js'
+import { chooseStaff, PNG, adminLogin, bookAppointment, expectNoHorizontalScroll, watchErrors } from './helpers.js'
 
 test('owner confirms a payment: booking → confirmed, stats update, notifications logged', async ({ page }) => {
   const errors = watchErrors(page)
@@ -71,8 +71,7 @@ test('owner cancels a booking and the slot is released; day calendar renders', a
   await page.goto('/book')
   await page.getByRole('checkbox', { name: /^Gel Pedicure/ }).check()
   await page.getByRole('button', { name: 'Continue' }).click()
-  await page.getByRole('radio', { name: /^An\b/ }).check({ force: true })
-  await page.getByRole('button', { name: 'Continue' }).click()
+  await chooseStaff(page, 'An')
   const selected = page.locator('[role=option][aria-selected=true]')
   await expect(selected).toBeVisible()
   expect((await selected.getAttribute('aria-label')).split(',')[0]).toBe(dateLabel.split(',')[0])

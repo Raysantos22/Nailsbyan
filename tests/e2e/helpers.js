@@ -33,6 +33,15 @@ export async function pickServices(page, services) {
   }
 }
 
+// The Staff step only exists when more than one staff member takes bookings.
+export async function chooseStaff(page, staff) {
+  const group = page.getByRole('radiogroup', { name: 'Choose staff' })
+  await expect(page.getByText('Choose a date').or(group)).toBeVisible()
+  if (!(await group.isVisible())) return
+  if (staff) await page.getByRole('radio', { name: new RegExp(`^${staff}\\b`) }).check({ force: true })
+  await page.getByRole('button', { name: 'Continue' }).click()
+}
+
 // Walk the whole public booking flow. Returns { reference, time, dateLabel }.
 export async function bookAppointment(
   page,
@@ -51,8 +60,7 @@ export async function bookAppointment(
   await pickServices(page, services)
   await page.getByRole('button', { name: 'Continue' }).click()
 
-  await page.getByRole('radio', { name: new RegExp(`^${staff}\\b`) }).check({ force: true })
-  await page.getByRole('button', { name: 'Continue' }).click()
+  await chooseStaff(page, staff)
 
   // A date with availability is auto-selected; wait for time buttons.
   const selectedDate = page.locator('[role=option][aria-selected=true]')

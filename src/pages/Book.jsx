@@ -10,12 +10,13 @@ import { groupByCategory, isAddonAvailable, summarize, toggleService } from '../
 import { ErrorBox, Field, Loading, Notice, PageHeader, Spinner } from '../components/ui.jsx'
 import PaymentInstructions from '../components/booking/PaymentInstructions.jsx'
 
-const STEPS = ['Services', 'Staff', 'Date & time', 'Your details', 'Confirm']
+const STEP_LABELS = { services: 'Services', staff: 'Staff', datetime: 'Date & time', details: 'Your details', confirm: 'Confirm' }
 
-function Stepper({ step }) {
+function Stepper({ step, steps }) {
   return (
-    <ol className="flex items-center gap-1 overflow-x-auto pb-1 text-xs sm:gap-2 sm:text-sm" aria-label="Booking steps">
-      {STEPS.map((label, i) => {
+    <ol className="-m-1 flex items-center gap-1 overflow-x-auto p-1 text-xs sm:gap-2 sm:text-sm" aria-label="Booking steps">
+      {steps.map((key, i) => {
+        const label = STEP_LABELS[key]
         const done = i < step
         const current = i === step
         return (
@@ -28,7 +29,7 @@ function Stepper({ step }) {
               {done ? <Check className="h-3.5 w-3.5" /> : i + 1}
             </span>
             <span className={`${current ? 'font-semibold text-ink' : 'text-stone-500'} ${current ? '' : 'hidden sm:inline'}`}>{label}</span>
-            {i < STEPS.length - 1 && <span className="mx-1 h-px w-4 bg-stone-300 sm:w-8" aria-hidden="true" />}
+            {i < steps.length - 1 && <span className="mx-1 h-px w-4 bg-stone-300 sm:w-8" aria-hidden="true" />}
           </li>
         )
       })}
@@ -454,16 +455,20 @@ export default function Book() {
   }, [step, booking])
 
   const summary = useMemo(() => summarize(selected, services.data || []), [selected, services.data])
-  const staffName = staffId ? staff.data?.find((s) => s.id === staffId)?.name : 'Any available'
+  // Solo salon (one bookable staff member): skip the Staff step entirely.
+  const showStaff = (staff.data?.length ?? 0) > 1
+  const steps = showStaff ? ['services', 'staff', 'datetime', 'details', 'confirm'] : ['services', 'datetime', 'details', 'confirm']
+  const current = steps[Math.min(step, steps.length - 1)]
+  const staffName = staffId ? staff.data?.find((s) => s.id === staffId)?.name : showStaff ? 'Any available' : staff.data?.[0]?.name || 'Any available'
   const hasMain = summary.items.some((s) => !s.is_addon)
 
   const next = () => {
-    if (step === 3) {
+    if (current === 'details') {
       const errs = validateDetails(details)
       setErrors(errs)
       if (Object.keys(errs).length) return
     }
-    setStep((s) => Math.min(s + 1, STEPS.length - 1))
+    setStep((s) => Math.min(s + 1, steps.length - 1))
   }
   const back = () => setStep((s) => Math.max(s - 1, 0))
 
@@ -485,7 +490,7 @@ export default function Book() {
       if (e.hint === 'slot_unavailable') {
         setSlot(null)
         setRefreshKey((k) => k + 1)
-        setStep(2)
+        setStep(steps.indexOf('datetime'))
       }
     } finally {
       setSubmitting(false)
@@ -520,7 +525,7 @@ export default function Book() {
     <>
       <PageHeader eyebrow="Book now" title="Book your appointment" />
       <div className="container-page max-w-4xl pt-6 pb-10">
-        <Stepper step={step} />
+        <Stepper step={step} steps={steps} />
         <div className="mt-6">
           {step > 0 && (
             <button type="button" onClick={back} className="btn-ghost mb-4 -ml-3">
@@ -541,11 +546,11 @@ export default function Book() {
           ) : (
             !loadError && (
               <>
-                {step === 0 && (
+                {current === 'services' && (
                   <StepServices services={services.data} selected={selected} setSelected={setSelected} currency={business.currency} />
                 )}
-                {step === 1 && <StepStaff staff={staff.data} staffId={staffId} setStaffId={setStaffId} />}
-                {step === 2 && (
+                {current === 'staff' && <StepStaff staff={staff.data} staffId={staffId} setStaffId={setStaffId} />}
+                {current === 'datetime' && (
                   <>
                     {submitError?.hint === 'slot_unavailable' && (
                       <div className="mb-4">
@@ -564,8 +569,8 @@ export default function Book() {
                     />
                   </>
                 )}
-                {step === 3 && <StepDetails business={business} details={details} setDetails={setDetails} errors={errors} />}
-                {step === 4 && slot && (
+                {current === 'details' && <StepDetails business={business} details={details} setDetails={setDetails} errors={errors} />}
+                {current === 'confirm' && slot && (
                   <>
                     <StepReview business={business} summary={summary} staffName={staffName} slot={slot} details={details} />
                     {submitError && submitError.hint !== 'slot_unavailable' && (
@@ -579,10 +584,10 @@ export default function Book() {
                 <SummaryBar
                   summary={summary}
                   currency={business.currency}
-                  onNext={step === 4 ? submit : next}
-                  nextLabel={step === 4 ? 'Confirm booking' : 'Continue'}
+                  onNext={current === 'confirm' ? submit : next}
+                  nextLabel={current === 'confirm' ? 'Confirm booking' : 'Continue'}
                   busy={submitting}
-                  disabled={(step === 0 && !hasMain) || (step === 2 && !slot) || (step === 4 && !slot)}
+                  disabled={(current === 'services' && !hasMain) || (current === 'datetime' && !slot) || (current === 'confirm' && !slot)}
                 />
               </>
             )

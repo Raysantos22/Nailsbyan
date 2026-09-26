@@ -36,7 +36,7 @@ function Logo({ business, centered = false }) {
       aria-label={`${business?.name || 'Home'} — home`}
     >
       {business?.logo_url && !business.logo_url.includes('/placeholders/') ? (
-        <img src={business.logo_url} alt={business.name} width="900" height="359" className="h-11 w-auto object-contain sm:h-16" />
+        <img src={business.logo_url} alt={business.name} width="900" height="329" className="h-11 w-auto object-contain sm:h-16" />
       ) : (
         <>
           <span className="font-script text-[2rem] leading-[0.9] text-ink sm:text-[2.4rem]">{business?.name || 'Nails'}</span>
