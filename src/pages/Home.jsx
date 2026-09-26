@@ -34,7 +34,7 @@ export default function Home() {
 
   const featured = (services.data || []).filter((s) => !s.is_addon).slice(0, 5)
   const photos = gallery.data || []
-  const strip = photos.slice(2, 6).length === 4 ? photos.slice(2, 6) : photos.slice(0, 4)
+  const strip = photos.slice(1, 5).length === 4 ? photos.slice(1, 5) : photos.slice(0, 4)
   const quotes = (testimonials.data || []).slice(0, 3)
   const reviewsUrl = business.facebook_page_url
     ? `${business.facebook_page_url}${business.facebook_page_url.includes('?') ? '&' : '?'}sk=reviews`
@@ -150,15 +150,18 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="relative min-h-[50svh] flex-1 overflow-hidden bg-blush">
-            {photos[1] && (
+          <div className="relative min-h-[60svh] flex-1 overflow-hidden bg-[#a9cde6]">
+            <picture>
+              <source media="(max-width: 767px)" srcSet="/images/welcome-nails-800.webp" />
               <img
-                src={photos[1].image_url}
-                alt={photos[1].caption || 'Nail design'}
-                className="absolute inset-0 h-full w-full object-cover"
+                src="/images/welcome-nails.webp"
+                alt="Almond nails in nude and pearl white with 3D flowers and gold bow nail art"
+                width="1313"
+                height="1198"
+                className="absolute inset-0 h-full w-full object-cover object-[50%_55%]"
                 loading="lazy"
               />
-            )}
+            </picture>
             <Link
               to="/gallery"
               className="absolute bottom-8 left-8 bg-white px-5 py-3 font-heading text-xs font-semibold tracking-[0.2em] text-ink uppercase shadow-sm transition hover:bg-ink hover:text-white"
