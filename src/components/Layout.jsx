@@ -9,12 +9,12 @@ import { ErrorBox, Loading } from './ui.jsx'
 
 const NAV = [
   { to: '/', label: 'Home', end: true },
-  { to: '/services', label: 'Menu' },
-  { to: '/gallery', label: 'Lookbook' },
+  { to: '/services', label: 'Services' },
+  { to: '/gallery', label: 'Gallery' },
   { to: '/contact', label: 'Contact' },
   { to: '/my-bookings', label: 'My Booking' },
 ]
-const NAV_LEFT = NAV.slice(1, 3)
+const NAV_LEFT = NAV.slice(0, 3)
 const NAV_RIGHT = NAV.slice(3)
 
 export function DemoBanner() {
@@ -40,8 +40,8 @@ function Logo({ business, centered = false }) {
       ) : (
         <>
           <span className="font-script text-[2rem] leading-[0.9] text-ink sm:text-[2.4rem]">{business?.name || 'Nails'}</span>
-          <span className="mt-2.5 font-heading text-[0.6rem] font-semibold tracking-[0.35em] text-ink/80 uppercase">
-            Nail studio
+          <span className="mt-2.5 font-heading text-[0.55rem] font-medium tracking-[0.35em] text-ink/80 uppercase">
+            Beauty in every detail
           </span>
         </>
       )}
@@ -57,25 +57,25 @@ function Header({ business }) {
   }, [location.pathname])
 
   const linkClass = ({ isActive }) =>
-    `font-heading text-[0.7rem] font-semibold tracking-[0.2em] uppercase transition hover:text-brand-600 ${
+    `font-heading text-[0.72rem] font-normal tracking-[0.25em] uppercase transition hover:text-brand-600 ${
       isActive ? 'text-brand-600' : 'text-ink'
     }`
   const mobileLinkClass = ({ isActive }) =>
     `py-3 font-heading text-sm font-semibold tracking-[0.2em] uppercase ${isActive ? 'text-brand-600' : 'text-ink'}`
 
   return (
-    <header className="sticky top-0 z-40 border-b border-ink/5 bg-mist/90 backdrop-blur">
+    <header className="sticky top-0 z-40 bg-mist/95 backdrop-blur">
       {/* Desktop: nav | centered logo | nav */}
       <div className="container-page hidden h-24 grid-cols-[1fr_auto_1fr] items-center gap-6 md:grid">
-        <nav className="flex items-center gap-8" aria-label="Main">
+        <nav className="flex items-center gap-10" aria-label="Main">
           {NAV_LEFT.map((n) => (
-            <NavLink key={n.to} to={n.to} className={linkClass}>
+            <NavLink key={n.to} to={n.to} end={n.end} className={linkClass}>
               {n.label}
             </NavLink>
           ))}
         </nav>
         <Logo business={business} centered />
-        <nav className="flex items-center justify-end gap-8" aria-label="Secondary">
+        <nav className="flex items-center justify-end gap-10" aria-label="Secondary">
           {NAV_RIGHT.map((n) => (
             <NavLink key={n.to} to={n.to} className={linkClass}>
               {n.label}

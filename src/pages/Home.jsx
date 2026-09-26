@@ -7,26 +7,6 @@ import { useAsync } from '../lib/useAsync.js'
 import { formatDuration, formatMoney } from '../lib/format.js'
 import FacebookPagePlugin from '../components/FacebookPagePlugin.jsx'
 
-// Watercolour-style blob behind the hero photo.
-function BrushBlob({ className = '' }) {
-  return (
-    <svg viewBox="0 0 600 640" className={className} aria-hidden="true" preserveAspectRatio="none">
-      <path
-        fill="currentColor"
-        opacity="0.7"
-        d="M92 58c58-22 121-8 183-18 71-12 132-44 201-22 47 15 64 63 71 108 9 56-12 108-4 164 8 58 49 110 35 168-13 56-66 96-122 110-62 16-126-6-190 2-60 8-121 44-176 20C39 566 18 510 12 455 5 395 38 340 36 280 34 222 2 166 18 112c9-30 45-43 74-54z"
-      />
-      <path
-        fill="currentColor"
-        opacity="1"
-        d="M130 96c50-16 104-2 157-12 66-12 118-40 176-14 38 17 50 60 52 99 3 50-18 96-10 146 8 52 42 98 26 148-15 46-62 74-110 84-56 12-112-10-168-4-54 6-108 34-154 8-38-21-50-68-52-112-2-50 26-96 26-146 0-46-24-92-10-136 10-32 38-52 67-61z"
-      />
-      <path fill="currentColor" opacity="0.35" d="M470 30c30 4 60 18 72 44s-4 52-26 60-50-6-62-30 -14-78 16-74z" />
-      <path fill="currentColor" opacity="0.3" d="M40 540c20-8 48-2 58 16s-2 42-24 46-48-8-52-28 0-28 18-34z" />
-    </svg>
-  )
-}
-
 // Loose brush stroke used as a decorative accent.
 function BrushStroke({ className = '' }) {
   return (
@@ -52,9 +32,8 @@ export default function Home() {
 
   const featured = (services.data || []).filter((s) => !s.is_addon).slice(0, 5)
   const photos = gallery.data || []
-  const hero = photos[0]
-  const second = photos[1] || photos[0]
-  const strip = photos.slice(2, 6).length === 4 ? photos.slice(2, 6) : photos.slice(0, 4)
+  const second = photos[0]
+  const strip = photos.slice(1, 5).length === 4 ? photos.slice(1, 5) : photos.slice(0, 4)
   const quotes = (testimonials.data || []).slice(0, 3)
   const reviewsUrl = business.facebook_page_url
     ? `${business.facebook_page_url}${business.facebook_page_url.includes('?') ? '&' : '?'}sk=reviews`
@@ -63,50 +42,50 @@ export default function Home() {
   return (
     <div className="-mb-16 bg-mist">
       {/* ---------------------------------------------------------------- Hero */}
-      <section className="dot-texture overflow-hidden">
-        <div className="container-page grid items-center gap-10 py-12 md:grid-cols-2 md:gap-6 md:py-20">
-          <div className="md:text-right">
-            <h1 className="font-heading text-[2.5rem] leading-[1.05] font-bold tracking-[0.08em] text-ink uppercase sm:text-6xl lg:text-[4.25rem]">
-              Small art
+      <section className="relative overflow-hidden">
+        {/* decorative blocks along the bottom edge, as in the design */}
+        <div className="halftone absolute bottom-6 left-[50%] hidden h-12 w-24 opacity-25 md:block" aria-hidden="true" />
+        <div className="absolute right-[6%] bottom-0 hidden h-24 w-48 bg-blush md:block" aria-hidden="true" />
+        <div className="absolute right-[6%] bottom-24 hidden h-10 w-28 bg-blush/70 md:block" aria-hidden="true" />
+
+        <div className="container-page relative grid items-center md:min-h-[600px] md:grid-cols-[1fr_1.2fr]">
+          <div className="relative z-10 pt-10 pb-6 text-center md:py-24">
+            <h1 className="font-heading text-[2.1rem] leading-[1.15] font-semibold tracking-[0.1em] whitespace-nowrap text-ink uppercase sm:text-5xl lg:text-[3.3rem] xl:text-[3.7rem]">
+              Pretty nails
               <br />
-              for your
-              <br />
-              fingertips
+              happier you
             </h1>
-            <p className="mt-6 max-w-sm text-lg leading-relaxed text-stone-600 md:ml-auto">
-              {business.tagline || 'Manicures, pedicures, gel and nail art — book your slot online in a minute.'}
+            <p className="mx-auto mt-6 max-w-xs font-heading text-lg leading-snug font-light text-ink/85 sm:text-xl">
+              Fresh sets. Clean vibes.
+              <br />
+              Gel, extensions &amp; nail art
+              <br />
+              by {business.name}.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3 md:justify-end">
-              <Link to="/book" className="btn-outline">
-                Book an appointment
-              </Link>
-            </div>
-            {business.facebook_page_url && (
-              <a
-                href={business.facebook_page_url}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-6 inline-flex items-center gap-2 text-sm text-stone-500 hover:text-ink"
-              >
-                <Facebook className="h-4 w-4 text-[#0866FF]" /> Latest work & reviews on Facebook
-              </a>
-            )}
+            <Link to="/book" className="btn-outline mt-8 px-10">
+              Book an appointment
+            </Link>
           </div>
 
-          <div className="relative mx-auto w-full max-w-md md:max-w-none">
-            <BrushBlob className="absolute -inset-x-6 -inset-y-8 h-[calc(100%+4rem)] w-[calc(100%+3rem)] text-[#f4c9bf]" />
-            <div className="relative mx-auto aspect-[4/5] w-[68%] rotate-2 sm:w-[78%] overflow-hidden bg-blush shadow-[0_30px_60px_-25px_rgba(45,28,34,0.35)]">
-              {hero && (
-                <img src={hero.image_url} alt={hero.caption || 'Nail design'} className="h-full w-full object-cover" fetchPriority="high" />
-              )}
-            </div>
+          <div className="relative z-10 -mx-4 self-end md:mx-0 md:-mr-16 lg:-mr-28">
+            <picture>
+              <source media="(max-width: 767px)" srcSet="/images/hero-hands-760.webp" />
+              <img
+                src="/images/hero-hands.webp"
+                alt="Hands with a glossy white manicure and gold rings"
+                width="1400"
+                height="1046"
+                className="block h-auto w-full"
+                fetchPriority="high"
+              />
+            </picture>
           </div>
         </div>
       </section>
 
       {/* ------------------------------------------------------------ Collage */}
       <section className="grid md:grid-cols-2">
-        <div className="relative min-h-[360px] overflow-hidden bg-powder sm:min-h-[440px]">
+        <div className="relative min-h-[360px] overflow-hidden bg-blush sm:min-h-[440px]">
           <BrushStroke className="absolute top-10 -right-10 h-16 w-72 rotate-[-8deg] text-white/60" />
           <BrushStroke className="absolute bottom-16 -left-12 h-12 w-60 rotate-[6deg] text-white/40" />
           {second && (
