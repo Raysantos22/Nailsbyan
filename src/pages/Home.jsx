@@ -44,14 +44,9 @@ export default function Home() {
     <div className="-mb-16 bg-mist">
       {/* ---------------------------------------------------------------- Hero */}
       {/* Fills the screen below the header; the hands drift down on scroll. */}
-      <section className="relative flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden sm:min-h-[calc(100svh-5rem)] md:block lg:min-h-[calc(100svh-6rem)]">
-        {/* decorative blocks along the bottom edge, as in the design */}
-        <div className="halftone absolute bottom-8 left-[40%] hidden h-12 w-24 opacity-25 md:block" aria-hidden="true" />
-        <div className="absolute right-[5%] bottom-0 hidden h-28 w-56 bg-blush md:block" aria-hidden="true" />
-        <div className="absolute right-[5%] bottom-28 hidden h-12 w-32 bg-blush/70 md:block" aria-hidden="true" />
-
-        <div className="container-page relative z-20 flex items-center md:absolute md:inset-0 md:mx-auto">
-          <div className="w-full pt-10 pb-4 text-center md:w-[44%] md:py-0">
+      <section className="relative flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden sm:min-h-[calc(100svh-5rem)] split:block lg:min-h-[calc(100svh-6rem)]">
+        <div className="container-page relative z-20 flex items-center split:absolute split:inset-0 split:mx-auto">
+          <div className="w-full pt-10 pb-4 text-center split:w-[44%] split:py-0">
             <h1 className="font-heading text-[2.1rem] leading-[1.15] font-semibold tracking-[0.1em] whitespace-nowrap text-ink uppercase sm:text-5xl lg:text-[3.4rem] xl:text-[4rem]">
               Pretty nails
               <br />
@@ -71,7 +66,7 @@ export default function Home() {
         </div>
 
         {/* Hands: big, anchored bottom-right, parallax on scroll */}
-        <div className="relative z-10 mt-auto -mx-[22%] md:absolute md:right-[-3vw] md:bottom-0 md:mx-0 md:w-[min(64vw,calc((100svh-6rem)*1.22))] md:max-w-[1180px]">
+        <div className="relative z-10 mt-auto -mx-[22%] sm:-mx-[6%] split:absolute split:right-[-3vw] split:bottom-0 split:mx-0 split:w-[min(64vw,calc((100svh-6rem)*1.22))] split:max-w-[1180px]">
           <div ref={handsRef} className="will-change-transform">
             <picture>
               <source media="(max-width: 767px)" srcSet="/images/hero-hands-760.webp" />
@@ -89,9 +84,9 @@ export default function Home() {
       </section>
 
       {/* ------------------------------------- Welcome (big split panels) */}
-      <section className="grid md:grid-cols-2">
+      <section className="grid lg:grid-cols-2">
         {/* Left: full-height photo with social rail */}
-        <div className="relative min-h-[70svh] overflow-hidden bg-blush md:min-h-[100svh]">
+        <div className="relative min-h-[70svh] overflow-hidden bg-blush sm:min-h-[80svh] lg:min-h-[100svh]">
           <picture>
             <source media="(max-width: 767px)" srcSet="/images/studio-700.webp" />
             <img

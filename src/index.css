@@ -2,6 +2,10 @@
 
 /* Brand tokens — PLACEHOLDER palette (soft blush + deep rose) until the
    client supplies brand colours. Change them here and the whole site follows. */
+/* Side-by-side hero: landscape screens >= 1024px, or any screen >= 1280px.
+   Portrait tablets use the stacked (phone-style) layout instead. */
+@custom-variant split (@media (min-width: 1024px) and (orientation: landscape), (min-width: 1280px));
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Playfair Display", ui-serif, Georgia, serif;
