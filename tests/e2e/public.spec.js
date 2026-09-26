@@ -6,7 +6,7 @@ test('public pages render real data without errors or horizontal scroll', async 
 
   await page.goto('/')
   await waitForApp(page)
-  await expect(page.getByRole('heading', { level: 1, name: 'Nails by An' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: /Small art/ })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Popular services' })).toBeVisible()
   await expect(page.getByText('Gel Polish Manicure').first()).toBeVisible()
   await expect(page.locator('iframe[title="Facebook Page"]')).toHaveAttribute('src', /profile\.php%3Fid%3D61556891524730/)

@@ -9,11 +9,13 @@ import { ErrorBox, Loading } from './ui.jsx'
 
 const NAV = [
   { to: '/', label: 'Home', end: true },
-  { to: '/services', label: 'Services' },
-  { to: '/gallery', label: 'Gallery' },
+  { to: '/services', label: 'Menu' },
+  { to: '/gallery', label: 'Lookbook' },
   { to: '/contact', label: 'Contact' },
   { to: '/my-bookings', label: 'My Booking' },
 ]
+const NAV_LEFT = NAV.slice(1, 3)
+const NAV_RIGHT = NAV.slice(3)
 
 export function DemoBanner() {
   if (!DEMO_MODE) return null
@@ -24,13 +26,25 @@ export function DemoBanner() {
   )
 }
 
-function Logo({ business }) {
+// Script wordmark + small caps line, like a boutique logo. If a logo image
+// is uploaded (Admin → Settings) it is shown instead of the wordmark.
+function Logo({ business, centered = false }) {
   return (
-    <Link to="/" className="flex items-center gap-2.5" aria-label={`${business?.name || 'Home'} — home`}>
-      {business?.logo_url ? (
-        <img src={business.logo_url} alt="" className="h-10 w-10 rounded-full object-cover ring-1 ring-brand-100" />
-      ) : null}
-      <span className="font-display text-xl font-semibold text-ink">{business?.name || 'Nails'}</span>
+    <Link
+      to="/"
+      className={`flex flex-col leading-none ${centered ? 'items-center' : 'items-start'}`}
+      aria-label={`${business?.name || 'Home'} — home`}
+    >
+      {business?.logo_url && !business.logo_url.includes('/placeholders/') ? (
+        <img src={business.logo_url} alt="" className="h-12 w-auto object-contain" />
+      ) : (
+        <>
+          <span className="font-script text-[2rem] leading-[0.9] text-ink sm:text-[2.4rem]">{business?.name || 'Nails'}</span>
+          <span className="mt-2.5 font-heading text-[0.6rem] font-semibold tracking-[0.35em] text-ink/80 uppercase">
+            Nail studio
+          </span>
+        </>
+      )}
     </Link>
   )
 }
@@ -43,29 +57,46 @@ function Header({ business }) {
   }, [location.pathname])
 
   const linkClass = ({ isActive }) =>
-    `rounded-full px-3 py-2 text-sm font-medium transition ${isActive ? 'bg-brand-50 text-brand-700' : 'text-stone-700 hover:text-brand-700'}`
+    `font-heading text-[0.7rem] font-semibold tracking-[0.2em] uppercase transition hover:text-brand-600 ${
+      isActive ? 'text-brand-600' : 'text-ink'
+    }`
+  const mobileLinkClass = ({ isActive }) =>
+    `py-3 font-heading text-sm font-semibold tracking-[0.2em] uppercase ${isActive ? 'text-brand-600' : 'text-ink'}`
 
   return (
-    <header className="sticky top-0 z-40 border-b border-brand-100 bg-cream/90 backdrop-blur">
-      <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Logo business={business} />
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
-          {NAV.map((n) => (
-            <NavLink key={n.to} to={n.to} end={n.end} className={linkClass}>
+    <header className="sticky top-0 z-40 border-b border-ink/5 bg-mist/90 backdrop-blur">
+      {/* Desktop: nav | centered logo | nav */}
+      <div className="container-page hidden h-24 grid-cols-[1fr_auto_1fr] items-center gap-6 md:grid">
+        <nav className="flex items-center gap-8" aria-label="Main">
+          {NAV_LEFT.map((n) => (
+            <NavLink key={n.to} to={n.to} className={linkClass}>
               {n.label}
             </NavLink>
           ))}
-          <Link to="/book" className="btn-primary ml-2">
-            Book Now
-          </Link>
         </nav>
-        <div className="flex items-center gap-2 md:hidden">
-          <Link to="/book" className="btn-primary btn-sm">
-            Book Now
+        <Logo business={business} centered />
+        <nav className="flex items-center justify-end gap-8" aria-label="Secondary">
+          {NAV_RIGHT.map((n) => (
+            <NavLink key={n.to} to={n.to} className={linkClass}>
+              {n.label}
+            </NavLink>
+          ))}
+          <NavLink to="/book" className={linkClass}>
+            Book now
+          </NavLink>
+        </nav>
+      </div>
+
+      {/* Mobile */}
+      <div className="container-page flex h-16 items-center justify-between gap-3 md:hidden">
+        <Logo business={business} />
+        <div className="flex items-center gap-1">
+          <Link to="/book" className="btn-outline px-3! py-2! text-[0.65rem]!">
+            Book now
           </Link>
           <button
             type="button"
-            className="rounded-full p-2 text-stone-700 hover:bg-brand-50"
+            className="p-2 text-ink"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
             aria-controls="mobile-nav"
@@ -76,10 +107,10 @@ function Header({ business }) {
         </div>
       </div>
       {open && (
-        <nav id="mobile-nav" className="border-t border-brand-100 bg-cream md:hidden" aria-label="Mobile">
-          <div className="container-page flex flex-col py-2">
+        <nav id="mobile-nav" className="border-t border-ink/5 bg-mist md:hidden" aria-label="Mobile">
+          <div className="container-page flex flex-col divide-y divide-ink/5 py-1">
             {NAV.map((n) => (
-              <NavLink key={n.to} to={n.to} end={n.end} className={linkClass}>
+              <NavLink key={n.to} to={n.to} end={n.end} className={mobileLinkClass}>
                 {n.label}
               </NavLink>
             ))}
@@ -111,7 +142,7 @@ export function OpeningHours({ hours, compact = false }) {
 
 function Footer({ business }) {
   return (
-    <footer className="mt-20 border-t border-brand-100 bg-white">
+    <footer className="border-t border-ink/5 bg-white">
       <div className="container-page grid gap-10 py-12 sm:grid-cols-3">
         <div>
           <Logo business={business} />
@@ -198,7 +229,7 @@ export default function Layout() {
     <div className="flex min-h-screen flex-col">
       <DemoBanner />
       <Header business={business} />
-      <main className="flex-1">
+      <main className="flex-1 pb-16">
         {loading ? (
           <Loading label="Loading salon…" />
         ) : error ? (

@@ -41,10 +41,10 @@ export function Notice({ children, tone = 'info', className = '' }) {
 
 export function PageHeader({ eyebrow, title, children }) {
   return (
-    <header className="bg-gradient-to-b from-brand-50 to-cream py-10 sm:py-14">
+    <header className="dot-texture bg-mist py-10 sm:py-14">
       <div className="container-page text-center">
         {eyebrow && <p className="text-xs font-semibold tracking-[0.2em] text-brand-600 uppercase">{eyebrow}</p>}
-        <h1 className="mt-2 text-3xl font-semibold text-ink sm:text-4xl">{title}</h1>
+        <h1 className="mt-2 font-heading text-3xl font-bold tracking-[0.08em] text-ink uppercase sm:text-4xl">{title}</h1>
         {children && <div className="mx-auto mt-3 max-w-2xl text-stone-600">{children}</div>}
       </div>
     </header>
