@@ -578,3 +578,30 @@ describe('review fixes (security regressions)', () => {
     expect(localTimes(await slots([SVC.gelMani], date, STAFF_2))).toContain('10:00')
   })
 })
+
+describe('real client seed (supabase/seed.sql)', () => {
+  it('loads cleanly with the Nails by An price list, one staff member and 7am–4pm hours', async () => {
+    const real = await createDb({ seed: 'real' })
+    const rows = (sql, p) => real.query(sql, p).then((r) => r.rows)
+    const [biz] = await rows('select * from businesses')
+    expect(biz.phone).toBe('0916 430 9505')
+    expect(Number(biz.deposit_amount)).toBe(200)
+    const services = await rows('select name, price::int as price, is_addon from services where is_active order by sort_order')
+    expect(services.slice(0, 5).map((s) => [s.name, s.price])).toEqual([
+      ['Gel Manicure', 349],
+      ['Gel Pedicure', 349],
+      ['Hard Gel Overlay / BIAB', 449],
+      ['Soft Gel Extension', 549],
+      ['Toe Nail Extension', 549],
+    ])
+    expect(services.filter((s) => s.is_addon)).toHaveLength(4)
+    expect(await rows('select name from staff where is_active')).toEqual([{ name: 'An' }])
+    expect((await rows('select count(*)::int as n from gallery_photos'))[0].n).toBe(20)
+    // Monday: 60-min gel manicure, 07:00 → last start 15:00, every 30 min = 17 slots
+    const mon = nextLocalDate(1)
+    const slotsReal = await rows("select * from get_available_slots($1, array['22222222-0000-4000-8000-000000000001']::uuid[], $2)", [BUSINESS_ID, mon])
+    expect(slotsReal).toHaveLength(17)
+    expect(localTimes(slotsReal)[0]).toBe('07:00')
+    await real.close()
+  })
+})

@@ -18,7 +18,7 @@ export default function Services() {
   return (
     <>
       <PageHeader eyebrow="Menu" title="Services & prices">
-        Prices and durations are a guide — final price may vary with length and design. Add-ons can be added when you book.
+        Price may vary depending on your nail inspo / design — please send your nail inspo on Messenger. Removal can be added when you book (+₱50 if your current set was done by another salon).
       </PageHeader>
       <div className="container-page py-10">
         {loading && <Loading />}

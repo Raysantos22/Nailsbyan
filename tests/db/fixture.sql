@@ -1,7 +1,11 @@
+-- Test fixture for tests/db (a frozen copy of the original sample seed).
+-- The booking tests rely on this fixed menu: two staff, 11 services with
+-- known durations. Real client data lives in supabase/seed.sql.
 -- =====================================================================
--- Seed data for Nails by An (real client info from the owner's form and
--- price list, Sept 2026). Items still marked TODO are listed in
--- TODO_FOR_CLIENT.md; most can be edited later in /admin.
+-- Seed data for Nails by An.
+-- Only the business name and Facebook Page are real client info so far.
+-- Everything marked PLACEHOLDER is listed in TODO_FOR_CLIENT.md and must
+-- be replaced before launch (most of it can be edited in /admin).
 -- Safe to re-run: uses fixed ids + upserts.
 -- =====================================================================
 
@@ -15,28 +19,28 @@ insert into public.businesses (
   '11111111-1111-4111-8111-111111111111',
   'nails-by-an',
   'Nails by An',
-  'Where beautiful nails meet creativity and self-care.',
-  'Gel manicures and pedicures, hard gel / BIAB and soft gel extensions by An, in Xevera Subd., Mabalacat City. Price may vary depending on your nail inspo — feel free to send it when you book.',
-  'Blk 6 Lot 25 Lorna St., Xevera Subd., Tabun, Mabalacat City, Pampanga',
-  '0916 430 9505',
-  null,                                                                        -- TODO: email (optional)
-  '{"mon":{"open":"07:00","close":"16:00"},"tue":{"open":"07:00","close":"16:00"},"wed":{"open":"07:00","close":"16:00"},"thu":{"open":"07:00","close":"16:00"},"fri":{"open":"07:00","close":"16:00"},"sat":{"open":"07:00","close":"16:00"},"sun":null}',
-  '/images/logo.webp',
-  '/placeholders/payment-qr.svg',                                              -- TODO: real GCash / bank QR
-  'GCash / Bank transfer',
-  'Scan the QR code with GCash or your banking app to pay the ₱200 deposit, then send a screenshot of your payment (or the reference number) to us on Facebook Messenger with your booking reference. We''ll confirm your slot as soon as we see it.',
+  'Pretty, long-lasting nails — book your slot in a minute.',                -- PLACEHOLDER
+  'Nails by An offers clean, detailed manicures, pedicures, gel and nail art in a relaxed, friendly space.', -- PLACEHOLDER
+  'Address to follow (placeholder)',                                           -- PLACEHOLDER
+  '+63 900 000 0000',                                                          -- PLACEHOLDER
+  'hello@example.com',                                                         -- PLACEHOLDER
+  '{"mon":{"open":"09:00","close":"18:00"},"tue":{"open":"09:00","close":"18:00"},"wed":{"open":"09:00","close":"18:00"},"thu":{"open":"09:00","close":"18:00"},"fri":{"open":"09:00","close":"18:00"},"sat":{"open":"09:00","close":"18:00"},"sun":null}', -- PLACEHOLDER
+  '/placeholders/logo.svg',                                                    -- PLACEHOLDER
+  '/placeholders/payment-qr.svg',                                              -- PLACEHOLDER
+  'GCash',                                                                     -- PLACEHOLDER
+  'Scan the QR code to pay your deposit, then send a screenshot of your payment (or the reference number) to us on Facebook Messenger with your booking reference. We''ll confirm your slot as soon as we see it.',
   'https://www.facebook.com/profile.php?id=61556891524730',
   '61556891524730',
   null,
-  'Asia/Manila',
-  'PHP',
-  200,
-  30,                                                                          -- TODO: confirm booking window
-  2,                                                                           -- TODO: confirm minimum notice
+  'Asia/Manila',                                                               -- PLACEHOLDER (assumed Philippines — GCash)
+  'PHP',                                                                       -- PLACEHOLDER
+  200,                                                                         -- PLACEHOLDER deposit
+  30,                                                                          -- PLACEHOLDER
+  2,                                                                           -- PLACEHOLDER
   30,
   24,
-  'Need to cancel or reschedule? Please message us on Facebook Messenger as early as possible.', -- TODO: confirm policy
-  'No-shows forfeit the ₱200 deposit.'
+  'Free cancellation or rescheduling up to 24 hours before your appointment. Deposits for later cancellations may not be refunded. (placeholder policy)', -- PLACEHOLDER
+  'Missed appointments without notice forfeit the deposit. (placeholder policy)' -- PLACEHOLDER
 )
 on conflict (id) do update set
   slug = excluded.slug, name = excluded.name, tagline = excluded.tagline,
@@ -51,47 +55,45 @@ on conflict (id) do update set
   cancellation_policy = excluded.cancellation_policy, no_show_policy = excluded.no_show_policy;
 
 -- ---------------------------------------------------------------------
--- Services — from the Nails by An price list.
--- Durations are estimates (TODO: confirm with An).
--- Removal: "with new set" is an add-on; "removal only" is its own service.
+-- Services (ALL PLACEHOLDER — names, prices and durations)
 -- ---------------------------------------------------------------------
-insert into public.services (id, business_id, category, name, description, price, duration_minutes, is_addon, parent_service_id, sort_order, is_active) values
-  ('22222222-0000-4000-8000-000000000001', '11111111-1111-4111-8111-111111111111', 'Gel',          'Gel Manicure',                 'Long-lasting, high-shine gel polish on natural nails. Price may vary with nail art.', 349,  60, false, null, 10, true),
-  ('22222222-0000-4000-8000-000000000002', '11111111-1111-4111-8111-111111111111', 'Gel',          'Gel Pedicure',                 'Gel polish on toes for a chip-free finish. Price may vary with nail art.',           349,  60, false, null, 20, true),
-  ('22222222-0000-4000-8000-000000000003', '11111111-1111-4111-8111-111111111111', 'Hard Gel / BIAB', 'Hard Gel Overlay / BIAB',    'Builder gel overlay that strengthens natural nails. Price may vary with nail art.',  449,  90, false, null, 30, true),
-  ('22222222-0000-4000-8000-000000000004', '11111111-1111-4111-8111-111111111111', 'Extensions',   'Soft Gel Extension',           'Full set of soft gel extensions. Price may vary with length and nail art.',          549, 120, false, null, 40, true),
-  ('22222222-0000-4000-8000-000000000005', '11111111-1111-4111-8111-111111111111', 'Extensions',   'Toe Nail Extension',           'Soft gel extensions for toenails. Price may vary with nail art.',                    549,  90, false, null, 50, true),
-  ('22222222-0000-4000-8000-000000000006', '11111111-1111-4111-8111-111111111111', 'Removal only', 'Gel Removal (removal only)',   'Safe removal of gel polish, without a new set.',                                     100,  20, false, null, 60, true),
-  ('22222222-0000-4000-8000-000000000007', '11111111-1111-4111-8111-111111111111', 'Removal only', 'Hard Gel / BIAB Removal (removal only)', 'Removal of hard gel or BIAB, without a new set.',                              150,  30, false, null, 70, true),
-  ('22222222-0000-4000-8000-000000000008', '11111111-1111-4111-8111-111111111111', 'Removal only', 'Soft Gel Extensions Removal (removal only)', 'Removal of soft gel extensions, without a new set.',                       150,  30, false, null, 80, true),
-  ('22222222-0000-4000-8000-000000000009', '11111111-1111-4111-8111-111111111111', 'Add-ons',      'Gel Removal (with new set)',   'Remove existing gel before your new set.',                                            50,  15, true,  null, 90, true),
-  ('22222222-0000-4000-8000-000000000010', '11111111-1111-4111-8111-111111111111', 'Add-ons',      'Hard Gel / BIAB Removal (with new set)', 'Remove existing hard gel / BIAB before your new set.',                         100,  20, true,  null, 100, true),
-  ('22222222-0000-4000-8000-000000000011', '11111111-1111-4111-8111-111111111111', 'Add-ons',      'Soft Gel Extensions Removal (with new set)', 'Remove existing soft gel extensions before your new set.',                  100,  20, true,  null, 110, true),
-  ('22222222-0000-4000-8000-000000000012', '11111111-1111-4111-8111-111111111111', 'Add-ons',      'Removal of work done by another salon', '+₱50 on top of the removal price if your current set was done elsewhere.', 50,  10, true,  null, 120, true)
+insert into public.services (id, business_id, category, name, description, price, duration_minutes, is_addon, parent_service_id, sort_order) values
+  ('22222222-0000-4000-8000-000000000001', '11111111-1111-4111-8111-111111111111', 'Manicure',   'Classic Manicure',       'Shape, cuticle care, hand massage and regular polish.',        350,  45, false, null, 10),
+  ('22222222-0000-4000-8000-000000000002', '11111111-1111-4111-8111-111111111111', 'Manicure',   'Gel Polish Manicure',    'Long-lasting, high-shine gel polish that lasts 2–3 weeks.',    650,  60, false, null, 20),
+  ('22222222-0000-4000-8000-000000000003', '11111111-1111-4111-8111-111111111111', 'Pedicure',   'Classic Pedicure',       'Soak, scrub, shaping, cuticle care and regular polish.',       450,  60, false, null, 30),
+  ('22222222-0000-4000-8000-000000000004', '11111111-1111-4111-8111-111111111111', 'Pedicure',   'Gel Polish Pedicure',    'Full pedicure finished with chip-free gel polish.',            750,  75, false, null, 40),
+  ('22222222-0000-4000-8000-000000000005', '11111111-1111-4111-8111-111111111111', 'Pedicure',   'Foot Spa Pedicure',      'Extended soak, exfoliation, mask and massage.',                850,  90, false, null, 50),
+  ('22222222-0000-4000-8000-000000000006', '11111111-1111-4111-8111-111111111111', 'Extensions', 'Soft Gel Extensions',    'Full set of lightweight soft gel tips with gel polish.',      1200, 120, false, null, 60),
+  ('22222222-0000-4000-8000-000000000007', '11111111-1111-4111-8111-111111111111', 'Extensions', 'Polygel Extensions',     'Strong, natural-looking polygel full set.',                   1400, 120, false, null, 70),
+  ('22222222-0000-4000-8000-000000000008', '11111111-1111-4111-8111-111111111111', 'Add-ons',    'Nail Art',               'Hand-painted designs, chrome, cat-eye or charms (full set).',  200,  30, true,  null, 80),
+  ('22222222-0000-4000-8000-000000000009', '11111111-1111-4111-8111-111111111111', 'Add-ons',    'Gel / Extension Removal','Safe removal of existing gel or extensions.',                  150,  20, true,  null, 90),
+  ('22222222-0000-4000-8000-000000000010', '11111111-1111-4111-8111-111111111111', 'Add-ons',    'French Tips',            'Classic or coloured French tips.',                             150,  15, true,  null, 100),
+  ('22222222-0000-4000-8000-000000000011', '11111111-1111-4111-8111-111111111111', 'Add-ons',    'Paraffin Hand Treatment','Warm paraffin wax for soft, hydrated hands.',                  250,  15, true,  null, 110)
 on conflict (id) do update set
   category = excluded.category, name = excluded.name, description = excluded.description,
   price = excluded.price, duration_minutes = excluded.duration_minutes, is_addon = excluded.is_addon,
-  parent_service_id = excluded.parent_service_id, sort_order = excluded.sort_order, is_active = excluded.is_active;
+  parent_service_id = excluded.parent_service_id, sort_order = excluded.sort_order;
 
 -- ---------------------------------------------------------------------
--- Staff: An works alone ("Ako lang"), Mon–Sat 7:00 AM–4:00 PM.
+-- Staff (PLACEHOLDER — "An" assumed to be the owner/nail tech; the second
+-- tech exists only to demonstrate "any available". Rename or deactivate.)
 -- ---------------------------------------------------------------------
 insert into public.staff (id, business_id, name, bio, photo_url, is_active, sort_order) values
   ('33333333-0000-4000-8000-000000000001', '11111111-1111-4111-8111-111111111111', 'An',
-   'Owner and nail artist.', null, true, 1)
+   'Owner and lead nail artist.', '/placeholders/staff-1.svg', true, 1),
+  ('33333333-0000-4000-8000-000000000002', '11111111-1111-4111-8111-111111111111', 'Nail Tech 2 (placeholder)',
+   'Placeholder team member — rename or deactivate in Admin → Staff.', '/placeholders/staff-2.svg', true, 2)
 on conflict (id) do update set
   name = excluded.name, bio = excluded.bio, photo_url = excluded.photo_url,
   is_active = excluded.is_active, sort_order = excluded.sort_order;
 
--- Remove the old sample second tech (or just hide it if it has bookings).
-delete from public.staff s
- where s.id = '33333333-0000-4000-8000-000000000002'
-   and not exists (select 1 from public.bookings b where b.staff_id = s.id);
-update public.staff set is_active = false where id = '33333333-0000-4000-8000-000000000002';
-
-delete from public.staff_schedules where staff_id = '33333333-0000-4000-8000-000000000001';
+-- Schedules: An Mon–Sat 09:00–18:00; tech 2 Tue–Sat 10:00–18:00 (PLACEHOLDER)
+delete from public.staff_schedules
+ where staff_id in ('33333333-0000-4000-8000-000000000001', '33333333-0000-4000-8000-000000000002');
 insert into public.staff_schedules (staff_id, day_of_week, start_time, end_time)
-select '33333333-0000-4000-8000-000000000001'::uuid, d, '07:00'::time, '16:00'::time from generate_series(1, 6) as d;
+select '33333333-0000-4000-8000-000000000001'::uuid, d, '09:00'::time, '18:00'::time from generate_series(1, 6) as d
+union all
+select '33333333-0000-4000-8000-000000000002'::uuid, d, '10:00'::time, '18:00'::time from generate_series(2, 6) as d;
 
 -- ---------------------------------------------------------------------
 -- Gallery: real Nails by An work (files in public/gallery/)

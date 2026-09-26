@@ -53,7 +53,7 @@ test('owner confirms a payment: booking → confirmed, stats update, notificatio
 })
 
 test('owner cancels a booking and the slot is released; day calendar renders', async ({ page }) => {
-  const { reference, time, dateLabel } = await bookAppointment(page, { services: ['Classic Manicure'], staff: 'An', phone: '0917 444 5555' })
+  const { reference, time, dateLabel } = await bookAppointment(page, { services: ['Gel Pedicure'], staff: 'An', phone: '0917 444 5555' })
 
   await adminLogin(page)
   const card = page.locator(`[data-testid=admin-booking][data-reference="${reference}"]`).first()
@@ -69,7 +69,7 @@ test('owner cancels a booking and the slot is released; day calendar renders', a
 
   // Slot is bookable again for An
   await page.goto('/book')
-  await page.getByRole('checkbox', { name: /^Classic Manicure/ }).check()
+  await page.getByRole('checkbox', { name: /^Gel Pedicure/ }).check()
   await page.getByRole('button', { name: 'Continue' }).click()
   await page.getByRole('radio', { name: /^An\b/ }).check({ force: true })
   await page.getByRole('button', { name: 'Continue' }).click()
@@ -87,7 +87,7 @@ test('admin manages services, staff hours, gallery and the payment QR', async ({
   await page.getByRole('link', { name: 'Services', exact: true }).click()
   await page.getByRole('button', { name: 'Add service' }).click()
   await page.getByLabel('Name *').fill('Chrome Powder Set')
-  await page.getByLabel('Category').fill('Manicure')
+  await page.getByLabel('Category').fill('Gel')
   await page.getByLabel('Price *').fill('900')
   await page.getByLabel('Duration (minutes) *').fill('75')
   await page.getByLabel('Description').fill('Mirror-shine chrome finish.')
@@ -102,12 +102,12 @@ test('admin manages services, staff hours, gallery and the payment QR', async ({
   await page.getByRole('button', { name: 'Hide Chrome Powder Set' }).click()
   await expect(page.getByRole('button', { name: 'Show Chrome Powder Set' })).toBeVisible()
   await page.goto('/services')
-  await expect(page.getByRole('heading', { name: 'Manicure', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Gel', exact: true })).toBeVisible()
   await expect(page.getByText('Chrome Powder Set')).toHaveCount(0)
 
-  // Staff hours: give "Nail Tech 2" Sunday hours → Sunday becomes bookable for them
+  // Staff hours: give An Sunday hours
   await page.goto('/admin/staff')
-  await page.getByRole('button', { name: 'Working hours' }).nth(1).click()
+  await page.getByRole('button', { name: 'Working hours' }).first().click()
   const dialog = page.getByRole('dialog')
   await dialog.locator('div', { hasText: /^Sunday/ }).getByRole('button', { name: 'Add hours' }).click()
   await dialog.getByRole('button', { name: 'Save schedule' }).click()
@@ -137,7 +137,7 @@ test('admin manages services, staff hours, gallery and the payment QR', async ({
   await page.getByRole('button', { name: 'Save settings' }).click()
   await expect(page.getByText('Saved ✓')).toBeVisible()
 
-  await bookAppointment(page, { services: ['Classic Pedicure'], phone: '0917 777 8888' })
+  await bookAppointment(page, { services: ['Toe Nail Extension'], phone: '0917 777 8888' })
   await expect(page.getByTestId('payment-qr')).toHaveAttribute('src', /^data:image\/png/)
   await expect(page.getByRole('heading', { name: /Pay your ₱300 deposit/ })).toBeVisible()
 

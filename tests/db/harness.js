@@ -34,7 +34,7 @@ export async function createDb({ seed = true } = {}) {
       throw new Error(`Migration ${file} failed: ${e.message}`)
     }
   }
-  if (seed) await db.exec(read('supabase', 'seed.sql'))
+  if (seed) await db.exec(read('tests', 'db', seed === 'real' ? '../../supabase/seed.sql' : 'fixture.sql'))
   return db
 }
 

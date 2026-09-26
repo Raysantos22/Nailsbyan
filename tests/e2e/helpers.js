@@ -28,7 +28,8 @@ export async function waitForApp(page) {
 
 export async function pickServices(page, services) {
   for (const s of services) {
-    await page.getByRole('checkbox', { name: new RegExp(`^${s}`) }).check()
+    const escaped = s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    await page.getByRole('checkbox', { name: new RegExp(`^${escaped}`) }).check()
   }
 }
 
@@ -36,7 +37,7 @@ export async function pickServices(page, services) {
 export async function bookAppointment(
   page,
   {
-    services = ['Gel Polish Manicure', 'Nail Art'],
+    services = ['Gel Manicure', 'Gel Removal (with new set)'],
     staff = 'Any available',
     name = 'E2E Customer',
     phone = '0917 555 1234',

@@ -328,7 +328,7 @@ function StepDetails({ business, details, setDetails, errors }) {
       <Field label="Email (optional)" htmlFor="email" error={errors.email} hint="For your confirmation email.">
         <input id="email" className="input" type="email" autoComplete="email" value={details.email} onChange={set('email')} />
       </Field>
-      <Field label="Notes (optional)" htmlFor="notes" error={errors.notes} className="md:col-span-2" hint="Design ideas, nail length, allergies…">
+      <Field label="Notes (optional)" htmlFor="notes" error={errors.notes} className="md:col-span-2" hint="Describe your nail inspo, length or allergies. Price may vary with the design — send inspo photos on Messenger.">
         <textarea id="notes" className="input min-h-24" value={details.notes} onChange={set('notes')} maxLength={1000} />
       </Field>
       <div className="md:col-span-2">
