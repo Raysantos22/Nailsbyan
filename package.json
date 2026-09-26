@@ -1,0 +1,42 @@
+{
+  "name": "nails-by-an",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:demo": "vite --mode demo",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "oxlint src tests scripts",
+    "test": "npm run test:db && npm run test:functions && npm run test:e2e",
+    "test:db": "vitest run",
+    "test:functions": "npx -y deno@2 test --allow-env supabase/functions/tests/",
+    "check:functions": "npx -y deno@2 check supabase/functions/create-booking/index.ts supabase/functions/send-confirmation/index.ts supabase/functions/expire-unpaid-bookings/index.ts",
+    "test:e2e": "playwright test",
+    "db:reset": "supabase db reset",
+    "create-admin": "node --env-file=.env.local scripts/create-admin.mjs",
+    "seed:dev": "node --env-file=.env.local scripts/seed-dev.mjs",
+    "functions:serve": "supabase functions serve --env-file supabase/functions/.env",
+    "functions:deploy": "supabase functions deploy create-booking && supabase functions deploy send-confirmation && supabase functions deploy expire-unpaid-bookings"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@supabase/supabase-js": "^2.117.2",
+    "lucide-react": "^1.48.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.2"
+  }
+}

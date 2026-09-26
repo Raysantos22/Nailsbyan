@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" width="480" height="480">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fce7f3"/><stop offset="1" stop-color="#f9a8d4"/></linearGradient></defs>
+<rect width="480" height="480" fill="url(#g)"/>
+<g><rect x="70" y="200" width="54" height="91.8" rx="27" fill="#db2777"/><path d="M80.8 227.54 l32.4 36.72 M113.2 227.54 l-32.4 36.72" stroke="#fff" stroke-width="3"/><rect x="138" y="185" width="60" height="102" rx="30" fill="#db2777"/><rect x="147" y="200.3" width="12" height="51" rx="6" fill="#fff" opacity=".45"/><rect x="212" y="170" width="64" height="108.8" rx="32" fill="#db2777"/><path d="M212 200.464 Q244 175.44 276 200.464 L276 202 Q244 170 212 202 Z" fill="#fff" opacity=".95"/><rect x="290" y="185" width="60" height="102" rx="30" fill="#db2777"/><circle cx="320" cy="230.9" r="9.6" fill="#fff"/><circle cx="308" cy="256.4" r="4.8" fill="#fff"/><rect x="364" y="200" width="50" height="85" rx="25" fill="#db2777"/><path d="M374 225.5 l30 34 M404 225.5 l-30 34" stroke="#fff" stroke-width="3"/></g>
+<text x="240" y="440" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#67293c" opacity=".55">Sample design 7</text>
+</svg>

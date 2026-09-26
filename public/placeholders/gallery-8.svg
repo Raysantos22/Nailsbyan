@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" width="480" height="480">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5f5f4"/><stop offset="1" stop-color="#d6d3d1"/></linearGradient></defs>
+<rect width="480" height="480" fill="url(#g)"/>
+<g><rect x="70" y="200" width="54" height="91.8" rx="27" fill="#292524"/><rect x="78.1" y="213.77" width="10.8" height="45.9" rx="5.4" fill="#fff" opacity=".45"/><rect x="138" y="185" width="60" height="102" rx="30" fill="#292524"/><path d="M138 213.56 Q168 190.1 198 213.56 L198 215 Q168 185 138 215 Z" fill="#fafaf9" opacity=".95"/><rect x="212" y="170" width="64" height="108.8" rx="32" fill="#292524"/><circle cx="244" cy="218.96" r="10.24" fill="#fafaf9"/><circle cx="231.2" cy="246.16" r="5.12" fill="#fafaf9"/><rect x="290" y="185" width="60" height="102" rx="30" fill="#292524"/><path d="M302 215.6 l36 40.800000000000004 M338 215.6 l-36 40.800000000000004" stroke="#fafaf9" stroke-width="3"/><rect x="364" y="200" width="50" height="85" rx="25" fill="#292524"/><rect x="371.5" y="212.75" width="10" height="42.5" rx="5" fill="#fff" opacity=".45"/></g>
+<text x="240" y="440" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#67293c" opacity=".55">Sample design 8</text>
+</svg>
